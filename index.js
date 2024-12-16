@@ -139,3 +139,4 @@ const renderSongs = (array) => {
     }
   
     userData.currentSong = song;
+}
