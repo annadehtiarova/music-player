@@ -137,6 +137,15 @@ const renderSongs = (array) => {
     } else {
       audio.currentTime = userData?.songCurrentTime;
     }
-  
     userData.currentSong = song;
-}
+    playButton.classList.add("playing");
+  
+    audio.play();
+  };
+  
+  const pauseSong = () => {
+    userData.songCurrentTime = audio.currentTime;
+    
+    playButton.classList.remove("playing");
+    audio.pause();
+  };
