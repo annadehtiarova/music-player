@@ -140,6 +140,7 @@ const renderSongs = (array) => {
     userData.currentSong = song;
     playButton.classList.add("playing");
   
+    highlightCurrentSong();
     audio.play();
   };
   
@@ -161,3 +162,53 @@ const renderSongs = (array) => {
       playSong(nextSong.id);
     }
   };
+
+  const playPreviousSong = () => {
+    if (userData?.currentSong === null) return;
+    else {
+     const currentSongIndex = getCurrentSongIndex();
+     const previousSong = userData?.songs[currentSongIndex - 1];
+ 
+     playSong(previousSong.id);
+    }
+ };
+
+ const shuffle = () => {
+    userData?.songs.sort(() => Math.random() - 0.5);
+    userData.currentSong = null;
+    userData.songCurrentTime = 0;
+  
+    renderSongs(userData?.songs);
+    pauseSong();
+    setPlayerDisplay();
+    setPlayButtonAccessibleText();
+  };
+
+ const highlightCurrentSong = () => {
+    const playlistSongElements = document.querySelectorAll(".playlist-song");
+    const songToHighlight = document.getElementById(
+      `song-${userData?.currentSong?.id}`
+    );
+  
+    playlistSongElements.forEach((songEl) => {
+      songEl.removeAttribute("aria-current");
+    });
+  
+    if (songToHighlight) songToHighlight.setAttribute("aria-current", "true");
+  };
+
+  const getCurrentSongIndex = () => userData?.songs.indexOf(userData?.currentSong);
+
+playButton.addEventListener("click", () => {
+    if (userData?.currentSong === null) {
+    playSong(userData?.songs[0].id);
+  } else {
+    playSong(userData?.currentSong.id);
+  }
+});
+
+pauseButton.addEventListener("click",  pauseSong);
+
+nextButton.addEventListener("click", playNextSong);
+
+previousButton.addEventListener("click", playPreviousSong);
